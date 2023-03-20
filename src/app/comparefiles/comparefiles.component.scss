@@ -1,0 +1,93 @@
+.main {
+    margin-top: 10px;
+    text-align: center;
+}
+
+::ng-deep .mat-tab-labels {
+    background-color: #50c4cc;
+}
+
+::ng-deep .mat-tab-label-active {
+
+    background-color: #1da4aa !important;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+    // border: 2px solid black;
+    color: white !important;
+
+}
+
+::ng-deep .mat-tab-label {
+    opacity: 1 !important;
+    background-color: white;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+    font-size: 16px !important;
+    // border: 2px solid black;
+    // color: #3cddd9 !important;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #50c4cc;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #50c4cc;
+}
+
+::ng-deep .mat-tab-label-content {
+    // color: #3cddd9;
+}
+
+.main {
+    // margin-top: 10px;
+    height: 750px;
+    border: 1px gray solid;
+    margin-left: 10px;
+    margin-right: 10px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.radiobtn {
+    margin-left: 10px;
+}
+
+mat-radio-button {
+    margin-left: 30px;
+}
+
+mat-form-field {
+    margin-left: 10px;
+}
+
+mat-label {
+    font-weight: 500;
+}
+
+// ::ng-deep .mat-tab-label-active {
+//     background-color: greenyellow !important;
+// }
+// ::ng-deep .mat-tab-label-active {
+//     width: 400px !important;
+//     height: 46px !important;
+//     background-color: black;
+//     position: relative;
+//     color: white !important;
+// }
+
+// ::ng-deep .mat-tab-label-active:before {
+//     content: '';
+//     width: 300px !important;
+//     height: 44px !important;
+//     background: #00c000;
+//     display: block;
+//     position: absolute;
+//     top: 1px;
+//     left: 1px;
+// }
+
+// ::ng-deep .mat-tab-label-active,
+// ::ng-deep .mat-tab-label-active:before {
+//     -webkit-clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+//     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+// }

@@ -1,0 +1,178 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="">
+    <mat-tab label="Extract,Load Files">
+        <div class="main">
+            <div style="margin-top: 0px;">
+                <mat-label>Type of factory:</mat-label>
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="typeOfFactory">
+                    <mat-radio-button value="nonsap">Non-SAP</mat-radio-button>
+                    <mat-radio-button value="sap">SAP</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div style="margin-top: 30px;" *ngIf="typeOfFactory=='sap'">
+                <mat-label>SAP Landscape:</mat-label>
+                <mat-radio-group aria-label="Select an option" class="radiobtn" [(ngModel)]="landscape"
+                    (ngModelChange)="onlandscapechange()">
+                    <mat-radio-button [value]="item" *ngFor="let item of landscapelist">{{item}}</mat-radio-button>
+                    <!-- <mat-radio-button value="Sirius">Sirius</mat-radio-button>
+                    <mat-radio-button value="U2K2">U2K2</mat-radio-button>
+                    <mat-radio-button value="Fusion">Fusion</mat-radio-button> -->
+                </mat-radio-group>
+            </div>
+
+            <div style="margin-top: 30px;" *ngIf="!isfactories">
+                <!-- [disabled]="(typeOfFactory==''&&landscape=='')?true:false" -->
+                <button mat-raised-button color="primary"
+                    style="  background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);"
+                    (click)="getFactorylist()">Get Factories</button>
+            </div>
+            <div style="margin-top: 30px;" *ngIf="isfactories">
+                <form action="">
+                    <mat-label>select Factory:</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select (selectionChange)="onfactorychange($event)" [(ngModel)]="factoryselection">
+                            <input type="text" placeholder="Search here..." aria-label="Number" matInput
+                                [formControl]="myControl">
+                            <mat-option [value]="item" *ngFor="let item of filteredList1|async">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <input type="file" #file style="display: none;" (change)="sapupload($event)">
+                <button mat-raised-button color="primary" (click)="file.click()"
+                    style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch SAP/Non-SAP
+                    File</button>
+                <p *ngIf="sapExtractFile!==''">{{sapExtractFile}}</p>
+                <button mat-raised-button color="primary" (click)="fetchQOneExtract()"
+                    style="margin-left: 10px;background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                    Corresponding Q1 Extract</button>
+            </div>
+        </div>
+
+    </mat-tab>
+    <mat-tab label="Validate Files">
+        <div class="main">
+            <div>
+                <button style="padding: 12px;
+                border-radius: 10px">Validate SAP/Non-SAP file and Q1 Extract</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Compare Files">
+        <div class="main">
+            <div style="display: flex;flex-direction: row;justify-content: center;">
+                <div>
+                    <div>
+                        <mat-label>SAP/Non-SAP File:</mat-label>
+                        <input type="text" style="margin-left:20px">
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <mat-radio-group aria-label="Select an option" class="radiobtn">
+                            <mat-radio-button value="1">All</mat-radio-button>
+                            <mat-radio-button value="2">Material List</mat-radio-button>
+                            <mat-radio-button value="3">Selective Material Id's</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                </div>
+                <div>
+                    <div>
+                        <mat-label>Q1 Extract:</mat-label>
+                        <input type="text" style="margin-left:20px">
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <mat-radio-group aria-label="Select an option" class="radiobtn">
+                            <mat-radio-button value="1">All</mat-radio-button>
+                            <mat-radio-button value="2">Material List</mat-radio-button>
+                            <mat-radio-button value="3">Selective Material Id's</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div style="margin-top: 30px;">
+                <button mat-raised-button style="background-color: #50c4cc;color: white;">Compare
+                    Files/Fields</button>
+                <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;">Download
+                    Original Extracts</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Share Results">
+        <div class="main">
+            <div>
+                <mat-label>Select Factory:</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-select>
+                        <mat-option value="1">amli</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div style="margin-top: 30px;">
+                <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;"
+                    (click)="sendResultsFile()">Share the
+                    Results file
+                    with Factory</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Upload Corrected Files">
+        <div class="main">
+            <div>
+                <mat-label>Select Factory:</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-select>
+                        <mat-option value="1">amli</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div style="display: flex;flex-direction: column;">
+                <mat-checkbox (change)='onIPLChange($event)' color='primary' [(ngModel)]='isIPL'>Prepare IPL(IP
+                    Loader)File</mat-checkbox>
+                <mat-checkbox (change)='onIPUChange($event)' color='primary' [(ngModel)]='isIPU'
+                    style="margin-left: 2px;">Prepare IPU(IP
+                    Update)File</mat-checkbox>
+                <mat-checkbox (change)='onIPRChange($event)' color='primary' [(ngModel)]='isIPR'
+                    style="margin-left: 11px;">Prepare IPR(IP
+                    Required)File</mat-checkbox>
+                <mat-checkbox (change)='onNewChrChange($event)' color='primary' [(ngModel)]='isNewchr'
+                    style="margin-left: 84px;">Prepare New
+                    Characteristics Loader File</mat-checkbox>
+            </div>
+            <div style="margin-top: 30px;">
+                <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;">Upload to Q1
+                    all
+                    the prepared files
+                </button>
+            </div>
+        </div>
+
+    </mat-tab>
+    <mat-tab label="Extract,Compare,Sign-off">
+        <div class="main">
+            <div>
+                <mat-label>Select Factory:</mat-label>
+                <mat-form-field appearance="outline">
+                    <mat-select>
+                        <mat-option value="1">amli</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div style="margin-top: 30px;">
+                <button mat-raised-button color="primary" style="background-color: #50c4cc;">Extract Q1
+                    File(of updated records)</button>
+                <button mat-raised-button color="primary" style="margin-left: 10px;background-color: #50c4cc;">Compare
+                    Q1 Extract and SAP/Non-SAP file</button>
+                <button mat-raised-button color="primary" style="margin-left: 10px;background-color: #50c4cc;">Inform
+                    Factory for a review and sign-off</button>
+            </div>
+
+        </div>
+    </mat-tab>
+</mat-tab-group>
+<div class="progress-loader" *ngIf="isLoader">
+    <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+</div>
