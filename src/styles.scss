@@ -1,4 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.blue-snackbar {
+    color: white;
+    background-color: green;
+}
+
+.red-snackbar {
+    color: white;
+    background-color: red;
+}
+
+.progress-loader {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.3);
+
+}

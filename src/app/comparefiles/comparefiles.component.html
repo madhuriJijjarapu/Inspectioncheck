@@ -104,6 +104,9 @@
     <mat-tab label="Share Results">
         <div class="main">
             <div>
+
+            </div>
+            <div>
                 <mat-label>Select Factory:</mat-label>
                 <mat-form-field appearance="outline">
                     <mat-select>
@@ -111,6 +114,76 @@
                     </mat-select>
                 </mat-form-field>
             </div>
+            <div><button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;"
+                    (click)="authentication()">Authentication</button></div>
+            <div>
+
+                <mat-form-field class="example-chip-list">
+                    <mat-label>TO:</mat-label>
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let mail of to" [selectable]="selectable" [removable]="removable"
+                            (removed)="remove(mail)">
+                            {{mail}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Enter mail..." [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                </mat-form-field>
+
+
+                <!-- <mat-form-field class="example-chip-list" appearance="fill">
+                    <mat-label>TO:</mat-label>
+                    <mat-chip-grid #chipGrids aria-label="Enter mails">
+                        <mat-chip-row *ngFor="let mail of to" (removed)="remove(mail)" [editable]="true"
+                            (edited)="edit(mail, $event)" [aria-description]="'press enter to edit ' + mail.name">
+                            {{mail.name}}
+                            <button matChipRemove [attr.aria-label]="'remove ' + mail.name">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                        <input placeholder="Enter mail..." [matChipInputFor]="chipGrids"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)" />
+                    </mat-chip-grid>
+                </mat-form-field> -->
+
+
+
+                <!-- <mat-form-field class="example-chip-list" appearance="fill">
+                    <mat-label>TO:</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Enter mails">
+                        <mat-chip-row *ngFor="let mail of to" (removed)="remove(mail)" [editable]="true"
+                            (edited)="edit(mail, $event)" [aria-description]="'press enter to edit ' + mail">
+                            {{mail}}
+                            <button matChipRemove [attr.aria-label]="'remove ' + mail">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                        <input placeholder="Enter mail..." [matChipInputFor]="chipGrid"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)" />
+                    </mat-chip-grid>
+                </mat-form-field> -->
+            </div>
+            <div>
+                <mat-form-field class="example-chip-list">
+                    <mat-label>CC:</mat-label>
+                    <mat-chip-list #chipList1>
+                        <mat-chip *ngFor="let mail of cc" [selectable]="selectable" [removable]="removable"
+                            (removed)="ccremove(mail)">
+                            {{mail}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Enter mail..." [matChipInputFor]="chipList1"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="ccadd($event)">
+                    </mat-chip-list>
+                </mat-form-field>
+            </div>
+
+
             <div style="margin-top: 30px;">
                 <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;"
                     (click)="sendResultsFile()">Share the
