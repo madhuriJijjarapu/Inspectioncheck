@@ -94,3 +94,41 @@ mat-label {
 .example-chip-list {
     width: 50%;
 }
+
+.loadersfiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // margin-top: 20px;
+}
+
+.mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: 0 1px 1px -1px gray,
+        0 1px 1px 0 gray,
+        0 1px 1px 0 gray;
+}
+
+.loaderspage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    flex-direction: column;
+    // height: 750px;
+    // height: 100%;
+    // top: auto;
+    // bottom: auto;
+}
+
+.filename {
+    margin-top: 10px;
+}
+
+.loaderborder {
+    border: 1px dashed #cfcfcf;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 50%;
+    display: flex;
+}

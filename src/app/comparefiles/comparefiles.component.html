@@ -132,40 +132,6 @@
                     </mat-chip-list>
                 </mat-form-field>
 
-
-                <!-- <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>TO:</mat-label>
-                    <mat-chip-grid #chipGrids aria-label="Enter mails">
-                        <mat-chip-row *ngFor="let mail of to" (removed)="remove(mail)" [editable]="true"
-                            (edited)="edit(mail, $event)" [aria-description]="'press enter to edit ' + mail.name">
-                            {{mail.name}}
-                            <button matChipRemove [attr.aria-label]="'remove ' + mail.name">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip-row>
-                        <input placeholder="Enter mail..." [matChipInputFor]="chipGrids"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                            (matChipInputTokenEnd)="add($event)" />
-                    </mat-chip-grid>
-                </mat-form-field> -->
-
-
-
-                <!-- <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>TO:</mat-label>
-                    <mat-chip-grid #chipGrid aria-label="Enter mails">
-                        <mat-chip-row *ngFor="let mail of to" (removed)="remove(mail)" [editable]="true"
-                            (edited)="edit(mail, $event)" [aria-description]="'press enter to edit ' + mail">
-                            {{mail}}
-                            <button matChipRemove [attr.aria-label]="'remove ' + mail">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip-row>
-                        <input placeholder="Enter mail..." [matChipInputFor]="chipGrid"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                            (matChipInputTokenEnd)="add($event)" />
-                    </mat-chip-grid>
-                </mat-form-field> -->
             </div>
             <div>
                 <mat-form-field class="example-chip-list">
@@ -193,30 +159,125 @@
         </div>
     </mat-tab>
     <mat-tab label="Upload Corrected Files">
-        <div class="main">
-            <div>
+        <div class="loaderspage">
+            <mat-card style="width:80%;height:70%">
+                <mat-card-content>
+                    <div style="display: flex;">
+                        <div class="loaderborder">
+                            <div>
+                                <input type="file" #mapfile style="display: none;" (change)="mappingFileupload($event)">
+                                <button mat-raised-button color="primary" (click)="mapfile.click()"
+                                    style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                    MappingData
+                                    File</button>
+                                <p *ngIf="mappingFile.name!==''" class="filename">{{mappingFile.name}}
+                                </p>
+                            </div>
+
+                        </div>
+                        <div style="margin-left: 10px;" class="loaderborder">
+                            <div>
+                                <input type="file" #reviewfile style="display: none;"
+                                    (change)="reviewedFileupload($event)">
+                                <button mat-raised-button color="primary" (click)="reviewfile.click()"
+                                    style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                    ReviewedData
+                                    File</button>
+                                <p *ngIf="reviewedFile.name!==''" class="filename">{{reviewedFile.name}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- <div style="display: flex;flex-direction: column;margin-top: 30px;"> -->
+                    <div style="display: flex;">
+                        <div class="loaderborder">
+                            <div class="loadersfiles">
+                                <mat-checkbox (change)='onIPLChange($event)' color='primary' [(ngModel)]='isIPL'>Prepare
+                                    IPL(IP
+                                    Loader)File</mat-checkbox>
+                                <div *ngIf="isIPL" style="margin-left: 10px;">
+                                    <input type="file" #charfile style="display: none;" (change)="iplupload($event)">
+                                    <button mat-raised-button color="primary" (click)="charfile.click()"
+                                        style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                        CharIPL File
+                                    </button>
+                                    <p *ngIf="charIPLFile.name!==''" class="filename">{{charIPLFile.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px;" class="loaderborder">
+                            <div class="loadersfiles">
+                                <mat-checkbox (change)='onIPUChange($event)' color='primary' [(ngModel)]='isIPU'
+                                    style="margin-left: 2px;">Prepare IPU(IP
+                                    Update)File</mat-checkbox>
+                                <div *ngIf="isIPU" style="margin-left: 10px;">
+                                    <input type="file" #charfile1 style="display: none;" (change)="ipuupload($event)">
+                                    <button mat-raised-button color="primary" (click)="charfile1.click()"
+                                        style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                        CharIPU File
+                                    </button>
+                                    <p *ngIf="charIPUFile.name!==''" class="filename">{{charIPUFile.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex">
+                        <div class="loaderborder">
+                            <div class="loadersfiles">
+                                <mat-checkbox (change)='onIPRChange($event)' color='primary' [(ngModel)]='isIPR'>Prepare
+                                    IPR(IP
+                                    Required)File</mat-checkbox>
+                                <div *ngIf="isIPR" style="margin-left: 10px;">
+                                    <input type="file" #charfile2 style="display: none;" (change)="iprupload($event)">
+                                    <button mat-raised-button color="primary" (click)="charfile2.click()"
+                                        style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                        CharIPR File
+                                    </button>
+                                    <p *ngIf="charIPRFile.name!==''" class="filename">{{charIPRFile.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px;" class="loaderborder">
+                            <div class="loadersfiles">
+                                <mat-checkbox (change)='onNewChrChange($event)' color='primary'
+                                    [(ngModel)]='isNewchr'>Prepare New
+                                    Characteristics Loader File</mat-checkbox>
+                                <div *ngIf="isNewchr" style="margin-left: 10px;">
+                                    <input type="file" #charfile3 style="display: none;"
+                                        (change)="newcharupload($event)">
+                                    <button mat-raised-button color="primary" (click)="charfile3.click()"
+                                        style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
+                                        NewChar File
+                                    </button>
+                                    <p *ngIf="newcharFile.name!==''" class="filename">{{newcharFile.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <!-- </div> -->
+                </mat-card-content>
+            </mat-card>
+            <!-- <div>
                 <mat-label>Select Factory:</mat-label>
                 <mat-form-field appearance="outline">
                     <mat-select>
                         <mat-option value="1">amli</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div style="display: flex;flex-direction: column;">
-                <mat-checkbox (change)='onIPLChange($event)' color='primary' [(ngModel)]='isIPL'>Prepare IPL(IP
-                    Loader)File</mat-checkbox>
-                <mat-checkbox (change)='onIPUChange($event)' color='primary' [(ngModel)]='isIPU'
-                    style="margin-left: 2px;">Prepare IPU(IP
-                    Update)File</mat-checkbox>
-                <mat-checkbox (change)='onIPRChange($event)' color='primary' [(ngModel)]='isIPR'
-                    style="margin-left: 11px;">Prepare IPR(IP
-                    Required)File</mat-checkbox>
-                <mat-checkbox (change)='onNewChrChange($event)' color='primary' [(ngModel)]='isNewchr'
-                    style="margin-left: 84px;">Prepare New
-                    Characteristics Loader File</mat-checkbox>
-            </div>
+            </div> -->
+
             <div style="margin-top: 30px;">
-                <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;">Upload to Q1
+                <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;"
+                    (click)="sendingloaders()">Upload to Q1
                     all
                     the prepared files
                 </button>

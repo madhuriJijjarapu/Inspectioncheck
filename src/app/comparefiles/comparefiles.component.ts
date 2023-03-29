@@ -38,6 +38,13 @@ export class ComparefilesComponent implements OnInit {
   addOnBlur = true;
   visible = true;
   selectable = true;
+  mappingFile: any = ''
+  reviewedFile: any = ''
+  charIPLFile: any = '';
+  charIPUFile: any = '';
+  charIPRFile: any = '';
+  newcharFile: any = '';
+  loaderslist: any = []; headerfileslist: any = [];
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   // to: Mail[] = [];
@@ -64,6 +71,35 @@ export class ComparefilesComponent implements OnInit {
   }
   onNewChrChange(event: any) {
 
+  }
+  mappingFileupload(event: any) {
+    this.mappingFile = event.target.files[0];
+    console.log(this.mappingFile, "file", event)
+    // this.mapFile = event.target.files[0];
+  }
+  reviewedFileupload(event: any) {
+    this.reviewedFile = event.target.files[0];
+    // this.reviewFile = event.target.files[0];
+  }
+  iplupload(event: any) {
+    this.charIPLFile = event.target.files[0];
+    // this.loaderslist.push('Inspection_loader')
+    // this.headerfileslist.push(this.charIPLFile)
+  }
+  ipuupload(event: any) {
+    this.charIPUFile = event.target.files[0];
+    // this.loaderslist.push('Update_loader')
+    // this.headerfileslist.push(this.charIPUFile)
+  }
+  iprupload(event: any) {
+    this.charIPRFile = event.target.files[0];
+    // this.loaderslist.push('Requirement_loader')
+    // this.headerfileslist.push(this.charIPRFile)
+  }
+  newcharupload(event: any) {
+    this.newcharFile = event.target.files[0];
+    // this.loaderslist.push('NewChar_loader')
+    // this.headerfileslist.push(this.newcharFile)
   }
   ngOnInit(): void {
     this.filteredList1 = this.myControl.valueChanges
@@ -176,7 +212,36 @@ export class ComparefilesComponent implements OnInit {
       }
     })
   }
+  sendingloaders() {
+    if (this.isIPL == true) {
+      this.loaderslist.push('Inspection_loader')
+      this.headerfileslist.push(this.charIPLFile)
+    }
+    if (this.isIPR == true) {
+      this.loaderslist.push('Requirement_loader')
+      this.headerfileslist.push(this.charIPRFile)
+    }
+    if (this.isIPU == true) {
+      this.loaderslist.push('Update_loader')
+      this.headerfileslist.push(this.charIPUFile)
+    }
 
+    if (this.isNewchr == true) {
+      this.loaderslist.push('NewChar_loader')
+      this.headerfileslist.push(this.newcharFile)
+    }
+    let body = new FormData();
+    this.headerfileslist.forEach((file: any) => {
+      body.append('header_file[]', file);
+    });
+    body.append('mappingfile', this.mappingFile);
+    body.append('reviewedfile', this.reviewedFile);
+    body.append('loader_list', this.loaderslist);
+    // body.append('header_file[]', this.headerfileslist);
+    this.httpService.post('loaders_api', body).subscribe((res: any) => {
+      console.log(res, "res")
+    })
+  }
 
   // sendResultsFile() {
   // var authProvider = '';
