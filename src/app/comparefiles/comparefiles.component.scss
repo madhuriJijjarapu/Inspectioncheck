@@ -132,3 +132,22 @@ mat-label {
     width: 50%;
     display: flex;
 }
+
+.example-spacer {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+h3 {
+    color: #00b4d8;
+    font-weight: 500;
+    // text-decoration: underline;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #00b4d8;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #00b4d8;
+}

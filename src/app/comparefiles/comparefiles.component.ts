@@ -5,7 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { HttpService } from '../http.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
 // import { MsAdalAngular6Service } from 'microsoft-adal-angular6';
 // import { Client } from '@microsoft/microsoft-graph-client';
 // export interface Mail {
@@ -51,6 +53,30 @@ export class ComparefilesComponent implements OnInit {
   // cc: Mail[] = [];
   to: any = [];
   cc: any = [];
+  filteredOptions: any;
+  filteredOptions1: any;
+  sapmaterials = [];
+  q1materials = [];
+  sapselectedOption: any = 'saplist';
+  q1selectedOption: any = 'q1list';
+
+  isSelected = false;
+  sapmaterialList: any;
+  q1materialList: any;
+  selectedSAPMaterials: any = [];
+  selectedQ1Materials: any = [];
+  teamInitial = '';
+  teamInitial1 = '';
+  isSuccess = false;
+  selectedInfoField: any;
+  infofields = ['COA', 'Others']
+  @ViewChild('select') select!: MatSelect;
+
+  allSelected = false;
+  @ViewChild('select1') select1!: MatSelect;
+
+  allSelected1 = false;
+  saptoq1data: any;
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private http: HttpClient) {
     // this.filteredList1 = this.factoryList.slice();
 
@@ -60,18 +86,18 @@ export class ComparefilesComponent implements OnInit {
     }
 
   }
-  onIPLChange(event: any) {
+  // onIPLChange(event: any) {
 
-  }
-  onIPUChange(event: any) {
+  // }
+  // onIPUChange(event: any) {
 
-  }
-  onIPRChange(event: any) {
+  // }
+  // onIPRChange(event: any) {
 
-  }
-  onNewChrChange(event: any) {
+  // }
+  // onNewChrChange(event: any) {
 
-  }
+  // }
   mappingFileupload(event: any) {
     this.mappingFile = event.target.files[0];
     console.log(this.mappingFile, "file", event)
@@ -107,11 +133,31 @@ export class ComparefilesComponent implements OnInit {
         startWith(''),
         map((value: any) => this._filter(value))
       );
+    this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter1(value))
+      );
+    this.filteredOptions1 = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter2(value))
+      );
   }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.factoryList.filter((option: any) => option.toString().toLowerCase().includes(filterValue));
+  }
+  private _filter1(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.sapmaterials.filter((option: any) => option.toString().toLowerCase().includes(filterValue));
+  }
+  private _filter2(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.q1materials.filter((option: any) => option.toString().toLowerCase().includes(filterValue));
   }
   onfactorychange(event: any) {
 
@@ -122,7 +168,7 @@ export class ComparefilesComponent implements OnInit {
     let body = new FormData()
     body.append('factory', this.typeOfFactory)
     body.append('landscape', this.landscape)
-    this.httpService.post('factory_list', body).subscribe((res: any) => {
+    this.httpService.post('http://127.0.0.1:5000/factory_list', body).subscribe((res: any) => {
       if (res) {
         // this.filteredList1 = this.factoryList.slice();
         this.isLoader = false;
@@ -152,7 +198,7 @@ export class ComparefilesComponent implements OnInit {
     body.append('factoryname', this.factoryData[this.factoryselection])
     // console.log("res")
 
-    this.httpService.post('data_extract', body).subscribe((res: any) => {
+    this.httpService.post('http://127.0.0.1:5000/data_extract', body).subscribe((res: any) => {
       console.log(res, "rrrrrrr")
       if (res) {
         this.isLoader = false;
@@ -238,11 +284,22 @@ export class ComparefilesComponent implements OnInit {
     body.append('reviewedfile', this.reviewedFile);
     body.append('loader_list', this.loaderslist);
     // body.append('header_file[]', this.headerfileslist);
-    this.httpService.post('loaders_api', body).subscribe((res: any) => {
+    this.httpService.post('http://127.0.0.1:5000/loaders_api', body).subscribe((res: any) => {
       console.log(res, "res")
     })
   }
-
+  // sendResultsFile() {
+  //   let header = {
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json',
+  //     'Access-Control-Allow-Origin': '*'
+  //   };
+  //   this.httpService.authorizeUser('https://login.microsoftonline.com/432a4219-1a46-4b7f-92ce-aae7bc705c26/oauth2/v2.0/authorize?response_type=code&client_id=4cd18089-4802-40ee-9ecf-1928718eb68f&redirect_uri=http://localhost:8080/&scope=offline_access%20Mail.Send%20User.Read.All', header).subscribe((res: any) => {
+  //     if (res) {
+  //       console.log(res, "code")
+  //     }
+  //   })
+  // }
   // sendResultsFile() {
   // var authProvider = '';
   // this.msadService = this.adalSvc
@@ -395,19 +452,177 @@ export class ComparefilesComponent implements OnInit {
       this.cc.splice(index, 1);
     }
   }
-  // edit(mail: any, event: MatChipInputEvent) {
-  //   const value = event.value.trim();
+  // compare files
+  sapoptionSelection(event: any) {
+    if (event.value != '') {
+      this.isSelected = false;
 
-  //   // Remove fruit if it no longer has a name
-  //   if (!value) {
-  //     this.remove(mail);
-  //     return;
-  //   }
+    }
+  }
+  q1optionSelection(event: any) {
+    if (event.value != '') {
+      this.isSelected = false;
 
-  //   // Edit existing fruit
-  //   const index = this.to.indexOf(mail);
-  //   if (index >= 0) {
-  //     this.to[index].name = value;
-  //   }
-  // }
+    }
+  }
+  sapmaterialSelection(event: any) {
+    this.selectedSAPMaterials = event.value;
+  }
+  q1materialSelection(event: any) {
+    this.selectedQ1Materials = event.value;
+  }
+  compareSAPQ1() {
+    this.isLoader = true;
+    var SAPprimarykeySet: any = ['Material', 'Characterstic', 'Vendor'];
+    var QOneprimarykeyset: any = ['Material', 'Inspection', 'supply_vendor'];
+
+    if (this.sapselectedOption != '') {
+      this.isSelected = false;
+      let body = new FormData();
+
+      if (this.sapselectedOption == 'saplist' || this.q1selectedOption == 'q1list' || this.sapselectedOption == 'sapselection' || this.q1selectedOption == 'q1selection') {
+        // this.selectedSAPMaterials = [];
+        // this.selectedQ1Materials = [];
+        if (this.sapmaterialList != undefined) {
+          let sapelements = this.sapmaterialList.replace(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|.<>\/?~]/g, '')
+          let saplist: any = [];
+          saplist.push(sapelements);
+          body.append('Materials SAP', saplist)
+        }
+        else if (this.q1materialList != undefined) {
+          let q1elements = this.q1materialList.replace(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|.<>\/?~]/g, '')
+          let q1list: any = [];
+          q1list.push(q1elements)
+          body.append('Materials QA', q1list)
+        }
+
+        // body.append('Info Field', this.selectedInfoField)
+
+        // }
+        else {
+          if (this.allSelected && this.allSelected1) {
+            body.append('Materials SAP', "ALL")
+            body.append('Materials QA', 'ALL')
+          }
+          else if (this.allSelected1) {
+            body.append('Materials SAP', "")
+            body.append('Materials QA', "ALL")
+          }
+          else if (this.allSelected) {
+            body.append('Materials SAP', "ALL")
+            body.append('Materials QA', "")
+
+          }
+          else {
+            let obj: any = {
+              'sapkeys': SAPprimarykeySet, 'qonekeys': QOneprimarykeyset
+            }
+            body.append('Materials SAP', this.selectedSAPMaterials)
+            body.append('Materials QA', this.selectedQ1Materials)
+            body.append('PrimaryKeySet', obj)
+          }
+
+        }
+        body.append('Info Field', this.selectedInfoField)
+
+        this.teamInitial = '';
+        this.teamInitial1 = '';
+        this.selectedSAPMaterials = [];
+        this.selectedQ1Materials = [];
+
+      }
+
+      this.httpService.post("getdetails", body,).subscribe((response: any) => {
+
+        console.log(response, "res")
+        if (response) {
+          this.isLoader = false;
+          this.isSuccess = true;
+          this.saptoq1data = response
+          // this.router.navigate(['/main/saptoq1'])
+
+
+        }
+      }, (err: any) => {
+        this.isSuccess = false;
+
+        this.isLoader = false;
+        console.log(err, "error")
+      })
+      // this.httpService.post('getdetails1', body).subscribe((res: any) => {
+      //   if (res) {
+      //     this.q1tosapdata = res
+      //     console.log(res, "q1tosap")
+      //   }
+      // })
+    }
+    else {
+      this.isSelected = true;
+      this.isLoader = false;
+      this.isSuccess = false;
+
+
+    }
+    this.isSuccess = false;
+  }
+  compareData() {
+    this.isLoader = true;
+    if (this.sapselectedOption != '' || this.q1selectedOption != '') {
+      let body = new FormData();
+
+      if (this.sapselectedOption == 'saplist' || this.q1selectedOption == 'q1list') {
+        if (this.sapmaterialList != undefined) {
+          let sapelements = this.sapmaterialList.replace(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|.<>\/?~]/g, '')
+          let saplist: any = [];
+          saplist.push(sapelements);
+          body.append('Materials SAP', saplist)
+        }
+        else if (this.q1materialList != undefined) {
+          let q1elements = this.q1materialList.replace(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|.<>\/?~]/g, '')
+          let q1list: any = [];
+          q1list.push(q1elements)
+          body.append('Materials QA', q1list)
+        }
+
+      }
+      // else if (this.q1selectedOption == 'q1list') {
+      //   if (this.q1materialList != undefined) {
+      //     let q1elements = this.q1materialList.replace(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|.<>\/?~]/g, '')
+      //     let q1list: any = [];
+      //     q1list.push(q1elements)
+      //     body.append('Materials QA', q1list)
+      //   }
+      // }
+      else if (this.sapselectedOption == 'sapselection') {
+        if (this.allSelected) {
+          body.append('Materials SAP', 'ALL')
+        }
+        else {
+          body.append('Materials SAP', this.selectedSAPMaterials)
+        }
+      }
+      else if (this.q1selectedOption == 'q1selection') {
+        if (this.allSelected) {
+          body.append('Materials QA', 'ALL')
+        }
+        else {
+          body.append('Materials QA', this.selectedQ1Materials)
+        }
+      }
+    }
+  }
+  toggleAllSelection() {
+    if (this.allSelected) {
+      this.select.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+  toggleAllSelection1() {
+    if (this.allSelected1) {
+      this.select1.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.select1.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
 }

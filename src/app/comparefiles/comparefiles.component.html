@@ -60,7 +60,7 @@
         </div>
     </mat-tab>
     <mat-tab label="Compare Files">
-        <div class="main">
+        <!-- <div class="main">
             <div style="display: flex;flex-direction: row;justify-content: center;">
                 <div>
                     <div>
@@ -99,6 +99,126 @@
                 <button mat-raised-button style="margin-left: 10px;background-color: #50c4cc;color: white;">Download
                     Original Extracts</button>
             </div>
+        </div> -->
+        <div class="" align="center" style="margin-top: 10%;">
+            <mat-card style="width: 900px;border:1px solid #0077b6;">
+                <mat-card-content>
+                    <div>
+                        <mat-label><b>Info Field:</b></mat-label>
+                        <mat-form-field appearance="outline" class="ml-2">
+                            <mat-select [(ngModel)]="selectedInfoField" name="info">
+                                <mat-option *ngFor="let item of infofields" [value]="item">
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="row ">
+                        <div class="col-6">
+                            <h3>SAP File Materials</h3>
+                            <div style="display: flex;flex-wrap: wrap;margin:10px 45px;">
+                                <mat-label style="margin:10px 10px"><b>Select an Option:</b></mat-label>
+                                <mat-radio-group aria-label="Select an option" [(ngModel)]="sapselectedOption" required
+                                    (change)="sapoptionSelection($event)">
+                                    <mat-radio-button value="saplist" class="ml-2">SAP Material List</mat-radio-button>
+                                    <mat-radio-button value="sapselection" class="ml-2"> SAP Material Selection
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div *ngIf="sapselectedOption=='saplist'">
+                                <textarea [(ngModel)]="sapmaterialList" id="listOfMaterials"
+                                    style="width:300px;height:100px"></textarea>
+                            </div>
+                            <div *ngIf="isSelected" style="color:red">Select Option is required</div>
+                            <div *ngIf="sapselectedOption=='sapselection'">
+                                <form class="example-form">
+                                    <mat-label>Select Materials</mat-label>
+                                    <mat-form-field appearance="outline" class="ml-2">
+                                        <mat-select multiple (selectionChange)="sapmaterialSelection($event)"
+                                            [(ngModel)]="teamInitial" name="Materials SAP" #select>
+                                            <input type="text" placeholder="Search here..." aria-label="Number" matInput
+                                                [formControl]="myControl">
+                                            <div class="select-all ml-3">
+                                                <mat-checkbox [(ngModel)]="allSelected"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (change)="toggleAllSelection()">Select All</mat-checkbox>
+                                            </div>
+                                            <mat-option *ngFor="let option of filteredOptions|async" [value]="option">
+                                                {{option}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div *ngIf="sapmaterials.length==0&&q1materials.length==0">
+                                        <span style="color:red">Please upload SAP and QOne files</span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div *ngIf="selectedSAPMaterials.length>0&&sapselectedOption=='sapselection'">
+                                <textarea style="width:300px;height:100px">{{selectedSAPMaterials}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h3>QOne File Materials</h3>
+                            <div style="display: flex;flex-wrap: wrap;margin:10px 45px;">
+                                <mat-label style="margin:10px 10px"><b>Select an Option:</b></mat-label>
+                                <mat-radio-group aria-label="Select an option" [(ngModel)]="q1selectedOption" required
+                                    (change)="q1optionSelection($event)">
+                                    <mat-radio-button value="q1list" class="ml-1">QOne MaterialList</mat-radio-button>
+                                    <mat-radio-button value="q1selection" class="ml-1"> QOne MaterialSelection
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div *ngIf="q1selectedOption=='q1list'">
+                                <textarea [(ngModel)]="q1materialList" id="listOfMaterials"
+                                    style="width:300px;height:100px"></textarea>
+                            </div>
+
+                            <div *ngIf="isSelected" style="color:red">Select Option is required</div>
+
+                            <div *ngIf="q1selectedOption=='q1selection'">
+                                <form class="example-form">
+                                    <mat-label>Select Materials</mat-label>
+                                    <mat-form-field appearance="outline" class="ml-2">
+                                        <mat-select multiple (selectionChange)="q1materialSelection($event)"
+                                            [(ngModel)]="teamInitial1" name="Materials SAP" #select1>
+                                            <input type="text" placeholder="Search here..." aria-label="Number" matInput
+                                                [formControl]="myControl">
+                                            <div class="select-all ml-3">
+                                                <mat-checkbox [(ngModel)]="allSelected1"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (change)="toggleAllSelection1()">Select All</mat-checkbox>
+                                            </div>
+                                            <mat-option *ngFor="let option of filteredOptions1|async" [value]="option">
+                                                {{option}}
+                                            </mat-option>
+                                        </mat-select>
+
+                                    </mat-form-field>
+                                    <div *ngIf="sapmaterials.length==0&&q1materials.length==0">
+                                        <span style="color:red">Please upload SAP and QOne files</span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div *ngIf="selectedQ1Materials.length>0&&q1selectedOption=='q1selection'">
+                                <textarea style="width:300px;height:100px">{{selectedQ1Materials}}</textarea>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- <div *ngIf="sapmaterials.length==0&&q1materials.length==0 &&q1materialList=='' && sapmaterialList==''">
+                        <span style="color:red">Please Select SAPMaterials & Q1Materials</span>
+                    </div> -->
+
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="  " style="display: flex;margin-top: 10px;
+                        align-items: center;
+                        justify-content: center;">
+            <button mat-raised-button style="background-color:#00b4d8;color:white" (click)="compareData()"
+                type="reset">Compare</button>
+
         </div>
     </mat-tab>
     <mat-tab label="Share Results">
@@ -194,7 +314,7 @@
                     <div style="display: flex;">
                         <div class="loaderborder">
                             <div class="loadersfiles">
-                                <mat-checkbox (change)='onIPLChange($event)' color='primary' [(ngModel)]='isIPL'>Prepare
+                                <mat-checkbox color='primary' [(ngModel)]='isIPL'>Prepare
                                     IPL(IP
                                     Loader)File</mat-checkbox>
                                 <div *ngIf="isIPL" style="margin-left: 10px;">
@@ -209,8 +329,8 @@
                         </div>
                         <div style="margin-left: 10px;" class="loaderborder">
                             <div class="loadersfiles">
-                                <mat-checkbox (change)='onIPUChange($event)' color='primary' [(ngModel)]='isIPU'
-                                    style="margin-left: 2px;">Prepare IPU(IP
+                                <mat-checkbox color='primary' [(ngModel)]='isIPU' style="margin-left: 2px;">Prepare
+                                    IPU(IP
                                     Update)File</mat-checkbox>
                                 <div *ngIf="isIPU" style="margin-left: 10px;">
                                     <input type="file" #charfile1 style="display: none;" (change)="ipuupload($event)">
@@ -226,7 +346,7 @@
                     <div style="display:flex">
                         <div class="loaderborder">
                             <div class="loadersfiles">
-                                <mat-checkbox (change)='onIPRChange($event)' color='primary' [(ngModel)]='isIPR'>Prepare
+                                <mat-checkbox color='primary' [(ngModel)]='isIPR'>Prepare
                                     IPR(IP
                                     Required)File</mat-checkbox>
                                 <div *ngIf="isIPR" style="margin-left: 10px;">
@@ -241,8 +361,7 @@
                         </div>
                         <div style="margin-left: 10px;" class="loaderborder">
                             <div class="loadersfiles">
-                                <mat-checkbox (change)='onNewChrChange($event)' color='primary'
-                                    [(ngModel)]='isNewchr'>Prepare New
+                                <mat-checkbox color='primary' [(ngModel)]='isNewchr'>Prepare New
                                     Characteristics Loader File</mat-checkbox>
                                 <div *ngIf="isNewchr" style="margin-left: 10px;">
                                     <input type="file" #charfile3 style="display: none;"

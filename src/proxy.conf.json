@@ -1,0 +1,6 @@
+{
+    "/api": {
+        "target": "https://login.microsoftonline.com",
+        "secure": false
+    }
+}

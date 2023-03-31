@@ -29,7 +29,14 @@ export class HttpService {
     const httpOptions: HttpOptions = this.addHttpOptions(headers, params);
     return this.httpClient.get(url, httpOptions).pipe(catchError((error: HttpErrorResponse) => throwError(error)));
   }
-
+  authorizeUser(url: string, headers?: Headers): Observable<any> {
+    const httpOptions: HttpOptions = this.addHttpOptions(headers);
+    return this.httpClient.get(url, httpOptions).pipe(catchError((error: HttpErrorResponse) => throwError(error)));
+  }
+  getToken(url: string, body: any, headers?: Headers): Observable<any> {
+    const httpOptions: HttpOptions = this.addHttpOptions(headers);
+    return this.httpClient.post(url, body, httpOptions).pipe(catchError((error: HttpErrorResponse) => throwError(error)));
+  }
   post(url: string, body: any, headers?: Headers): Observable<any> {
     const httpOptions: HttpOptions = this.addHttpOptions(headers);
     return this.httpClient.post(url, body, httpOptions).pipe(catchError((error: HttpErrorResponse) => throwError(error)));
