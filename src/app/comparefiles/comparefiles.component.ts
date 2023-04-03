@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs';
@@ -77,9 +77,24 @@ export class ComparefilesComponent implements OnInit {
 
   allSelected1 = false;
   saptoq1data: any;
-  constructor(private httpService: HttpService, private snackBar: MatSnackBar, private http: HttpClient) {
-    // this.filteredList1 = this.factoryList.slice();
 
+  //compare upload
+  uploadForm: FormGroup;
+  sapFile: any;
+  q1File: any;
+  isFilesSelected = false;
+  // isLoader = false;
+  selectedFactory = '';
+  factories = ['Jefferson city', 'Valinhos', 'Amli'];
+  sapColNames: any;
+  qoneColNames: any;
+  constructor(private httpService: HttpService, private snackBar: MatSnackBar, private http: HttpClient, private fb: FormBuilder,) {
+    // this.filteredList1 = this.factoryList.slice();
+    this.uploadForm = this.fb.group({
+      sapData: ['', Validators.required],
+      qOneData: ['', Validators.required],
+      factory: ['', Validators.required]
+    })
     if (this.landscape != '' || this.typeOfFactory != '') {
       this.islandscape = true;
       // console.log('kitekitekitekietekierelkitekitekitekitekite')
@@ -160,8 +175,8 @@ export class ComparefilesComponent implements OnInit {
     return this.q1materials.filter((option: any) => option.toString().toLowerCase().includes(filterValue));
   }
   onfactorychange(event: any) {
-
-    // console.log("fbdjlllll", event.value)
+    this.factoryselection = event.value;
+    console.log("fbdjlllll", event.value)
   }
   getFactorylist() {
     this.isLoader = true;
@@ -178,7 +193,7 @@ export class ComparefilesComponent implements OnInit {
         this.factoryList = Object.keys(res);
         // console.log(this.factoryData[this.factoryList[0]], "ppppppppp")
         // console.log(Object.keys(this.factoryList), "ffff");
-        // console.log(res, "keys")
+        console.log(res, "keys")
 
       }
     }, (err: any) => {
@@ -195,27 +210,34 @@ export class ComparefilesComponent implements OnInit {
     this.isLoader = true;
 
     let body = new FormData();
+    console.log(this.factoryselection, "factory selected")
+    console.log(this.factoryData, "factory selected............")
+
     body.append('factoryname', this.factoryData[this.factoryselection])
     // console.log("res")
 
     this.httpService.post('http://127.0.0.1:5000/data_extract', body).subscribe((res: any) => {
       console.log(res, "rrrrrrr")
-      if (res) {
+      if (res == 'yes') {
+        this.isLoader = false;
+        // window.open('http://127.0.0.1:5000/Q1_download');
+        this.snackBar.open("Fetch QOne Extract Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+
+      }
+      else {
         this.isLoader = false;
 
-        this.snackBar.open("Fetch QOne Extract Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+        this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+
       }
-      // else {
-      //   this.isLoader = false;
-
-      //   this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
-
-      // }
     }, (err: any) => {
       this.isLoader = false;
 
       this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
     })
+  }
+  qonedownload() {
+    window.open('http://127.0.0.1:5000/Q1_download');
   }
   onlandscapechange() {
     this.isfactories = false;
@@ -624,5 +646,47 @@ export class ComparefilesComponent implements OnInit {
     } else {
       this.select1.options.forEach((item: MatOption) => item.deselect());
     }
+  }
+  onSAPFileSelected(event: any) {
+    this.sapFile = event.target.files[0]
+
+  }
+  onQ1FileSelected(event: any) {
+    this.q1File = event.target.files[0]
+
+  }
+  //upload files
+  onUploadSAPQ1Files() {
+    if (this.uploadForm.valid) {
+      this.isFilesSelected = true;
+      let body = new FormData();
+
+      body.append('SAP data', this.sapFile)
+      body.append('QA data', this.q1File)
+      body.append('CITY', this.selectedFactory)
+      this.isLoader = true;
+      this.httpService.post("upload", body).subscribe((res: any) => {
+        if (res.sap_columns.length > 0 && res.qone_columns.length > 0) {
+
+          this.sapColNames = res.sap_columns;
+          this.qoneColNames = res.qone_columns;
+          this.isLoader = false;
+          this.snackBar.open("Files Uploaded Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+          // this.router.navigate(['/home/mappingSelection'])
+        }
+        else {
+          this.isLoader = false;
+          this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+        }
+
+      }, (err: any) => {
+        this.isLoader = false;
+        this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+      });
+    }
+    else {
+      this.isFilesSelected = true
+    }
+    // )
   }
 }
