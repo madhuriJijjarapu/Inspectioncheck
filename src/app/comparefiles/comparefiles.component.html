@@ -38,7 +38,7 @@
                 </form>
             </div>
 
-            <div style="margin-top: 30px;">
+            <div style="margin-top: 30px;" *ngIf="!isdownloadQone">
                 <!-- <input type="file" #file style="display: none;" (change)="sapupload($event)">
                 <button mat-raised-button color="primary" (click)="file.click()"
                     style="background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch SAP/Non-SAP
@@ -48,8 +48,10 @@
                     style="margin-left: 10px;background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);">Fetch
                     Corresponding Q1 Extract</button>
             </div>
-            <div>
-                <button (click)="qonedownload()">downloadQone</button>
+            <div *ngIf="isdownloadQone" style="margin-top: 30px;">
+                <button mat-raised-button color="primary"
+                    style="margin-left: 10px;background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);"
+                    (click)="qonedownload()">downloadQoneFile</button>
             </div>
         </div>
 
@@ -106,8 +108,8 @@
 
         <div class="" align="center">
 
-            <mat-card style="width: 600px;margin-top:2%;border:1px solid #0077b6;height: 150px;" class="">
-                <mat-card-content class="mt-5">
+            <mat-card style="width: 600px;margin-top:2%;border:1px solid #0077b6;height: 200px;" class="">
+                <mat-card-content class="">
                     <form [formGroup]="uploadForm">
                         <mat-label><b>Factory Name:</b></mat-label>
                         <mat-form-field appearance="outline" class="ml-2">
@@ -129,7 +131,7 @@
                                 [ngStyle]="{'color':(sapFile!=='')?'#00b4d8':''}" required formControlName="sapData">
                             <!-- <mat-error>SAP file is Required</mat-error> -->
                         </div>
-                        <div class=" ml-5" style="display: flex;margin-top: 1%;
+                        <div class=" ml-5" style="display: flex;margin-top: 2%;
                     align-items: center; justify-content: center;">
 
                             <mat-label class="ml-4"><b>Choose QOne file:</b></mat-label>
@@ -170,8 +172,7 @@
                     <div class="row ">
                         <div class="col-6">
                             <h3>SAP File Materials</h3>
-                            <div style="display: flex;align-items: center;
-                            justify-content: center;">
+                            <div style="display: flex;flex-wrap: wrap;margin:10px 45px;">
                                 <mat-label style="margin:10px 10px"><b>Select an Option:</b></mat-label>
                                 <mat-radio-group aria-label="Select an option" [(ngModel)]="sapselectedOption" required
                                     (change)="sapoptionSelection($event)">
@@ -184,7 +185,7 @@
                                 <textarea [(ngModel)]="sapmaterialList" id="listOfMaterials"
                                     style="width:300px;height:100px"></textarea>
                             </div>
-                            <div *ngIf="isSelected" style="color:red">Select Option is required</div>
+                            <!-- <div *ngIf="isSelected" style="color:red">Select Option is required</div> -->
                             <div *ngIf="sapselectedOption=='sapselection'">
                                 <form class="example-form">
                                     <mat-label>Select Materials</mat-label>
@@ -203,7 +204,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <!-- <div *ngIf="sapmaterials.length==0&&q1materials.length==0">
+                                    <!-- <div *ngIf="dataService.sapmaterials.length==0&&q1materials.length==0">
                                         <span style="color:red">Please upload SAP and QOne files</span>
                                     </div> -->
                                 </form>
@@ -214,8 +215,7 @@
                         </div>
                         <div class="col-6">
                             <h3>QOne File Materials</h3>
-                            <div style="display: flex;align-items: center;
-                            justify-content: center;">
+                            <div style="display: flex;flex-wrap: wrap;margin:10px 45px;">
                                 <mat-label style="margin:10px 10px"><b>Select an Option:</b></mat-label>
                                 <mat-radio-group aria-label="Select an option" [(ngModel)]="q1selectedOption" required
                                     (change)="q1optionSelection($event)">
@@ -229,7 +229,7 @@
                                     style="width:300px;height:100px"></textarea>
                             </div>
 
-                            <div *ngIf="isSelected" style="color:red">Select Option is required</div>
+                            <!-- <div *ngIf="isSelected" style="color:red">Select Option is required</div> -->
 
                             <div *ngIf="q1selectedOption=='q1selection'">
                                 <form class="example-form">
@@ -250,7 +250,7 @@
                                         </mat-select>
 
                                     </mat-form-field>
-                                    <!-- <div *ngIf="sapmaterials.length==0&&q1materials.length==0">
+                                    <!-- <div *ngIf="dataService.sapmaterials.length==0&&dataService.q1materials.length==0">
                                         <span style="color:red">Please upload SAP and QOne files</span>
                                     </div> -->
                                 </form>
@@ -274,6 +274,8 @@
                         justify-content: center;">
             <button mat-raised-button style="background-color:#00b4d8;color:white" (click)="compareData()"
                 type="reset">Compare</button>
+            <button mat-raised-button class="ml-2" style="background-color:#00b4d8;color:white"
+                (click)="comparedownload()">Download</button>
 
         </div>
     </mat-tab>

@@ -88,6 +88,8 @@ export class ComparefilesComponent implements OnInit {
   factories = ['Jefferson city', 'Valinhos', 'Amli'];
   sapColNames: any;
   qoneColNames: any;
+  isdownloadQone = false;
+  isdownload = false;
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private http: HttpClient, private fb: FormBuilder,) {
     // this.filteredList1 = this.factoryList.slice();
     this.uploadForm = this.fb.group({
@@ -97,50 +99,31 @@ export class ComparefilesComponent implements OnInit {
     })
     if (this.landscape != '' || this.typeOfFactory != '') {
       this.islandscape = true;
-      // console.log('kitekitekitekietekierelkitekitekitekitekite')
     }
 
   }
-  // onIPLChange(event: any) {
 
-  // }
-  // onIPUChange(event: any) {
-
-  // }
-  // onIPRChange(event: any) {
-
-  // }
-  // onNewChrChange(event: any) {
-
-  // }
   mappingFileupload(event: any) {
     this.mappingFile = event.target.files[0];
-    console.log(this.mappingFile, "file", event)
-    // this.mapFile = event.target.files[0];
   }
   reviewedFileupload(event: any) {
     this.reviewedFile = event.target.files[0];
-    // this.reviewFile = event.target.files[0];
   }
   iplupload(event: any) {
     this.charIPLFile = event.target.files[0];
-    // this.loaderslist.push('Inspection_loader')
-    // this.headerfileslist.push(this.charIPLFile)
+
   }
   ipuupload(event: any) {
     this.charIPUFile = event.target.files[0];
-    // this.loaderslist.push('Update_loader')
-    // this.headerfileslist.push(this.charIPUFile)
+
   }
   iprupload(event: any) {
     this.charIPRFile = event.target.files[0];
-    // this.loaderslist.push('Requirement_loader')
-    // this.headerfileslist.push(this.charIPRFile)
+
   }
   newcharupload(event: any) {
     this.newcharFile = event.target.files[0];
-    // this.loaderslist.push('NewChar_loader')
-    // this.headerfileslist.push(this.newcharFile)
+
   }
   ngOnInit(): void {
     this.filteredList1 = this.myControl.valueChanges
@@ -183,7 +166,7 @@ export class ComparefilesComponent implements OnInit {
     let body = new FormData()
     body.append('factory', this.typeOfFactory)
     body.append('landscape', this.landscape)
-    this.httpService.post('http://127.0.0.1:5000/factory_list', body).subscribe((res: any) => {
+    this.httpService.post('factory_list', body).subscribe((res: any) => {
       if (res) {
         // this.filteredList1 = this.factoryList.slice();
         this.isLoader = false;
@@ -191,9 +174,7 @@ export class ComparefilesComponent implements OnInit {
         this.factoryData = res;
 
         this.factoryList = Object.keys(res);
-        // console.log(this.factoryData[this.factoryList[0]], "ppppppppp")
-        // console.log(Object.keys(this.factoryList), "ffff");
-        console.log(res, "keys")
+
 
       }
     }, (err: any) => {
@@ -204,7 +185,7 @@ export class ComparefilesComponent implements OnInit {
   }
   sapupload(event: any) {
     this.sapExtractFile = event.target.files[0].name
-    // console.log(event, "eee")
+
   }
   fetchQOneExtract() {
     this.isLoader = true;
@@ -216,11 +197,11 @@ export class ComparefilesComponent implements OnInit {
     body.append('factoryname', this.factoryData[this.factoryselection])
     // console.log("res")
 
-    this.httpService.post('http://127.0.0.1:5000/data_extract', body).subscribe((res: any) => {
+    this.httpService.post('data_extract', body).subscribe((res: any) => {
       console.log(res, "rrrrrrr")
       if (res == 'yes') {
         this.isLoader = false;
-        // window.open('http://127.0.0.1:5000/Q1_download');
+        this.isdownloadQone = true;
         this.snackBar.open("Fetch QOne Extract Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
 
       }
@@ -247,28 +228,17 @@ export class ComparefilesComponent implements OnInit {
       if (res) {
         console.log(res, "res")
         let newtab: any = window.open(res.url);
-        // newtab.document.write(res.message)
-        // newtab.document.querySelector("#otc").innerHTML = "Hello World!";
+
         console.log(newtab, "newtab")
         let test: any = newtab.document.getElementById("otc") as HTMLInputElement | null
         console.log(test, "test")
         newtab.document.getElementById("otc").text = res.message
-        // this.http.get("https://aadcdn.msauth.net/ests/2.1/content/cdnbundles/ux.converged.login.strings-en.min_9rx-kmbsmdm6rixjlx4bhq2.js").subscribe((res: any) => {
-        //   if (res.status == 200) {
-        //     console.log("status")
-        //   }
-        // })
 
-        // this.httpService.get("https://aadcdn.msauth.net/ests/2.1/content/cdnbundles/ux.converged.login.strings-en.min_9rx-kmbsmdm6rixjlx4bhq2.js").subscribe((res: any) => {
-        //   if (res.status == 200) {
-        //     console.log("status")
-        //   }
-        // })
       }
     })
   }
   sendResultsFile() {
-    // console.log(this.to, this.cc, "kjhukgk")
+
     let body: any = new FormData();
     body.append('to_list', this.to);
     body.append('cc_list', this.cc);
@@ -281,6 +251,7 @@ export class ComparefilesComponent implements OnInit {
     })
   }
   sendingloaders() {
+    this.isLoader = true;
     if (this.isIPL == true) {
       this.loaderslist.push('Inspection_loader')
       this.headerfileslist.push(this.charIPLFile)
@@ -290,7 +261,7 @@ export class ComparefilesComponent implements OnInit {
       this.headerfileslist.push(this.charIPRFile)
     }
     if (this.isIPU == true) {
-      this.loaderslist.push('Update_loader')
+      this.loaderslist.push('Updated_loader')
       this.headerfileslist.push(this.charIPUFile)
     }
 
@@ -306,8 +277,19 @@ export class ComparefilesComponent implements OnInit {
     body.append('reviewedfile', this.reviewedFile);
     body.append('loader_list', this.loaderslist);
     // body.append('header_file[]', this.headerfileslist);
-    this.httpService.post('http://127.0.0.1:5000/loaders_api', body).subscribe((res: any) => {
+    this.httpService.post('loaders_api', body).subscribe((res: any) => {
       console.log(res, "res")
+      if (res == 'yes') {
+        this.isLoader = false;
+        this.snackBar.open("Loaders pushed successfully.Please check in QualityOne...", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+      }
+      else {
+        this.isLoader = false;
+        this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+      }
+    }, (err: any) => {
+      this.isLoader = false;
+      this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
     })
   }
   // sendResultsFile() {
@@ -560,6 +542,7 @@ export class ComparefilesComponent implements OnInit {
         if (response) {
           this.isLoader = false;
           this.isSuccess = true;
+          this.isdownload = true;
           this.saptoq1data = response
           // this.router.navigate(['/main/saptoq1'])
 
@@ -631,7 +614,34 @@ export class ComparefilesComponent implements OnInit {
           body.append('Materials QA', this.selectedQ1Materials)
         }
       }
+      body.append('Info Field', this.selectedInfoField);
+      let sap_list: any = ['Material', 'Material Type.1', 'Optional/required characteristics', 'Upper limit', 'Lower limit', 'Insp. Method', 'InfoField1']
+      let qone_list: any = ['id', 'characteristic__v.name__v', 'ctq__v', 'inspection_plan__v.name__v', 'lsl__v', 'usl__v', 'test_method_phd2__c.name__v', 'test_method_phd2__c.external_id__c']
+      body.append('SAP list', sap_list);
+      body.append('QOne list', qone_list);
+      this.httpService.post("getdetails", body,).subscribe((response: any) => {
+
+        console.log(response, "res")
+        if (response) {
+          console.log(response, "response")
+          this.isLoader = false;
+          // this.isSuccess = true;
+          // this.dataService.saptoq1data = response
+          // this.router.navigate(['/home/result'])
+
+
+        }
+        else {
+          this.isLoader = false;
+        }
+      }, (err: any) => {
+        // this.isSuccess = false;
+
+        this.isLoader = false;
+        console.log(err, "error")
+      })
     }
+
   }
   toggleAllSelection() {
     if (this.allSelected) {
@@ -657,36 +667,40 @@ export class ComparefilesComponent implements OnInit {
   }
   //upload files
   onUploadSAPQ1Files() {
-    if (this.uploadForm.valid) {
-      this.isFilesSelected = true;
-      let body = new FormData();
+    // if (this.uploadForm.valid) {
+    this.isFilesSelected = true;
+    let body = new FormData();
+    this.isLoader = true;
+    body.append('SAP data', this.sapFile)
+    body.append('QA data', this.q1File)
+    body.append('CITY', this.selectedFactory)
 
-      body.append('SAP data', this.sapFile)
-      body.append('QA data', this.q1File)
-      body.append('CITY', this.selectedFactory)
-      this.isLoader = true;
-      this.httpService.post("upload", body).subscribe((res: any) => {
-        if (res.sap_columns.length > 0 && res.qone_columns.length > 0) {
-
-          this.sapColNames = res.sap_columns;
-          this.qoneColNames = res.qone_columns;
-          this.isLoader = false;
-          this.snackBar.open("Files Uploaded Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
-          // this.router.navigate(['/home/mappingSelection'])
-        }
-        else {
-          this.isLoader = false;
-          this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
-        }
-
-      }, (err: any) => {
+    this.httpService.post("upload", body).subscribe((res: any) => {
+      if (res.sap.length > 0 && res.Qone.length > 0) {
+        this.sapmaterials = res.sap;
+        this.q1materials = res.Qone;
+        // this.sapColNames = res.sap_columns;
+        // this.qoneColNames = res.qone_columns;
+        this.isLoader = false;
+        this.snackBar.open("Files Uploaded Successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+        // this.router.navigate(['/home/mappingSelection'])
+      }
+      else {
         this.isLoader = false;
         this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
-      });
-    }
-    else {
-      this.isFilesSelected = true
-    }
+      }
+
+    }, (err: any) => {
+      this.isLoader = false;
+      this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+    });
+    // }
+    // else {
+    //   this.isFilesSelected = true
+    // }
     // )
+  }
+  comparedownload() {
+    window.open('http://127.0.0.1:5000/download1')
   }
 }
