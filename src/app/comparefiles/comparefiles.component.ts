@@ -625,6 +625,8 @@ export class ComparefilesComponent implements OnInit {
         if (response) {
           console.log(response, "response")
           this.isLoader = false;
+          this.snackBar.open("Compare files successfully!", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
+
           // this.isSuccess = true;
           // this.dataService.saptoq1data = response
           // this.router.navigate(['/home/result'])
@@ -633,12 +635,12 @@ export class ComparefilesComponent implements OnInit {
         }
         else {
           this.isLoader = false;
+          this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
+
         }
       }, (err: any) => {
-        // this.isSuccess = false;
-
         this.isLoader = false;
-        console.log(err, "error")
+        this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
       })
     }
 
