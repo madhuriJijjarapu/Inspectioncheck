@@ -84,7 +84,7 @@ export class ComparefilesComponent implements OnInit {
   q1File: any;
   isFilesSelected = false;
   // isLoader = false;
-  selectedFactory = '';
+  selectedFactory: any;
   factories = ['Jefferson city', 'Valinhos', 'Amli'];
   sapColNames: any;
   qoneColNames: any;
@@ -703,6 +703,6 @@ export class ComparefilesComponent implements OnInit {
     // )
   }
   comparedownload() {
-    window.open('http://127.0.0.1:5000/download1')
+    window.open('http://127.0.0.1:5000/download1');
   }
 }

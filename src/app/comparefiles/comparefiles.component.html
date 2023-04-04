@@ -113,7 +113,7 @@
                     <form [formGroup]="uploadForm">
                         <mat-label><b>Factory Name:</b></mat-label>
                         <mat-form-field appearance="outline" class="ml-2">
-                            <input matInput [(ngModel)]="selectedFactory">
+                            <input matInput [(ngModel)]="selectedFactory" formControlName="factory">
                         </mat-form-field>
 
                         <!-- <mat-form-field appearance="outline" class="ml-2">
