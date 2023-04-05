@@ -86,7 +86,7 @@ export class ComparefilesComponent implements OnInit {
   q1File: any;
   isFilesSelected = false;
   // isLoader = false;
-  selectedFactory = '';
+  selectedFactory: any;
   factories = ['Jefferson city', 'Valinhos', 'Amli'];
   sapColNames: any;
   qoneColNames: any;
