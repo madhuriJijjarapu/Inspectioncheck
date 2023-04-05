@@ -39,7 +39,7 @@
 
 .main {
     // margin-top: 10px;
-    height: 750px;
+    height: 75vh;
     border: 1px gray solid;
     margin-left: 10px;
     margin-right: 10px;
@@ -150,4 +150,12 @@ h3 {
 
 ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
     background-color: #00b4d8;
+}
+
+:host ::ng-deep .mat-tab-header {
+    top: 0;
+    z-index: 1000;
+    position: sticky;
+    position: -webkit-sticky;
+    /* macOS/iOS Safari */
 }

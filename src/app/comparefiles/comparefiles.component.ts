@@ -8,6 +8,7 @@ import { HttpService } from '../http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
+import { environment } from 'src/environments/environment';
 // import { MsAdalAngular6Service } from 'microsoft-adal-angular6';
 // import { Client } from '@microsoft/microsoft-graph-client';
 // export interface Mail {
@@ -47,6 +48,7 @@ export class ComparefilesComponent implements OnInit {
   charIPRFile: any = '';
   newcharFile: any = '';
   loaderslist: any = []; headerfileslist: any = [];
+  isloaderspushed = false; jobId: any;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   // to: Mail[] = [];
@@ -218,7 +220,8 @@ export class ComparefilesComponent implements OnInit {
     })
   }
   qonedownload() {
-    window.open('http://127.0.0.1:5000/Q1_download');
+    let url = environment.apiUrl + 'Q1_download'
+    window.open(url);
   }
   onlandscapechange() {
     this.isfactories = false;
@@ -252,6 +255,8 @@ export class ComparefilesComponent implements OnInit {
   }
   sendingloaders() {
     this.isLoader = true;
+    this.headerfileslist = [];
+    this.loaderslist = [];
     if (this.isIPL == true) {
       this.loaderslist.push('Inspection_loader')
       this.headerfileslist.push(this.charIPLFile)
@@ -278,13 +283,17 @@ export class ComparefilesComponent implements OnInit {
     body.append('loader_list', this.loaderslist);
     // body.append('header_file[]', this.headerfileslist);
     this.httpService.post('loaders_api', body).subscribe((res: any) => {
+
       console.log(res, "res")
-      if (res == 'yes') {
+      if (res.status == 'success') {
+        this.isloaderspushed = true;
+        this.jobId = res.job_id;
         this.isLoader = false;
         this.snackBar.open("Loaders pushed successfully.Please check in QualityOne...", " ", { 'duration': 2000, panelClass: 'blue-snackbar' });
       }
       else {
         this.isLoader = false;
+        this.isloaderspushed = false;
         this.snackBar.open("Something Went Wrong...", " ", { 'duration': 2000, panelClass: 'red-snackbar' });
       }
     }, (err: any) => {
@@ -703,6 +712,9 @@ export class ComparefilesComponent implements OnInit {
     // )
   }
   comparedownload() {
-    window.open('http://127.0.0.1:5000/download1')
+
+    let url = environment.apiUrl + "resultfile";
+    console.log(url, "uuuuuuuuuuuuu")
+    window.open(url)
   }
 }

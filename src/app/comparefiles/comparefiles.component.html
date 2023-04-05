@@ -13,9 +13,6 @@
                 <mat-radio-group aria-label="Select an option" class="radiobtn" [(ngModel)]="landscape"
                     (ngModelChange)="onlandscapechange()">
                     <mat-radio-button [value]="item" *ngFor="let item of landscapelist">{{item}}</mat-radio-button>
-                    <!-- <mat-radio-button value="Sirius">Sirius</mat-radio-button>
-                    <mat-radio-button value="U2K2">U2K2</mat-radio-button>
-                    <mat-radio-button value="Fusion">Fusion</mat-radio-button> -->
                 </mat-radio-group>
             </div>
 
@@ -29,7 +26,8 @@
                 <form action="">
                     <mat-label>select Factory:</mat-label>
                     <mat-form-field appearance="outline">
-                        <mat-select (selectionChange)="onfactorychange($event)" [(ngModel)]="factoryselection">
+                        <mat-select (selectionChange)="onfactorychange($event)" [(ngModel)]="factoryselection"
+                            placeholder="Select here...">
                             <input type="text" placeholder="Search here..." aria-label="Number" matInput
                                 [formControl]="myControl">
                             <mat-option [value]="item" *ngFor="let item of filteredList1|async">{{item}}</mat-option>
@@ -113,7 +111,7 @@
                     <form [formGroup]="uploadForm">
                         <mat-label><b>Factory Name:</b></mat-label>
                         <mat-form-field appearance="outline" class="ml-2">
-                            <input matInput [(ngModel)]="selectedFactory">
+                            <input matInput [(ngModel)]="selectedFactory" placeholder="Enter name..">
                         </mat-form-field>
 
                         <!-- <mat-form-field appearance="outline" class="ml-2">
@@ -162,7 +160,7 @@
                     <div>
                         <mat-label><b>Info Field:</b></mat-label>
                         <mat-form-field appearance="outline" class="ml-2">
-                            <mat-select [(ngModel)]="selectedInfoField" name="info">
+                            <mat-select [(ngModel)]="selectedInfoField" name="info" placeholder="Select here...">
                                 <mat-option *ngFor="let item of infofields" [value]="item">
                                     {{item}}
                                 </mat-option>
@@ -458,6 +456,11 @@
                     all
                     the prepared files
                 </button>
+            </div>
+            <div *ngIf="isloaderspushed" class="mt-3">
+                <span style="color:rgb(22, 201, 22);font-size: 18px;font-weight: bold;">Your loader job {{jobId}} is
+                    completed.Please check in
+                    QualityOne..</span>
             </div>
         </div>
 
