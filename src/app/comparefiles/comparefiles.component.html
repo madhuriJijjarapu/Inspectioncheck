@@ -16,7 +16,7 @@
                 </mat-radio-group>
             </div>
 
-            <div style="margin-top: 30px;" *ngIf="!isfactories">
+            <div style="margin-top: 30px;" *ngIf="!isfactories|| typeOfFactory=='nonsap'">
                 <!-- [disabled]="(typeOfFactory==''&&landscape=='')?true:false" -->
                 <button mat-raised-button color="primary"
                     style="  background-image: linear-gradient(to bottom , #4DB0AD 0%, #317D9E 90%);"
@@ -111,7 +111,8 @@
                     <form [formGroup]="uploadForm">
                         <mat-label><b>Factory Name:</b></mat-label>
                         <mat-form-field appearance="outline" class="ml-2">
-                            <input matInput [(ngModel)]="selectedFactory" placeholder="Enter name..">
+                            <input matInput [(ngModel)]="selectedFactory" formControlName="factory"
+                                placeholder="Enter name..">
                         </mat-form-field>
 
                         <!-- <mat-form-field appearance="outline" class="ml-2">
